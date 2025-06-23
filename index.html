@@ -1,0 +1,278 @@
+はい、承知いたしました。ご提示いただいたブログの構成案に基づき、HTMLのサンプルコードを作成します。
+
+このコードは、ご要望のレイアウトと機能を表現するための基本的な構造（HTML）とスタイル（CSS）を含んでいます。実際のウェブサイトに組み込む際には、さらに詳細な調整や、JavaScriptによる動的な絞り込み機能の実装が必要になります。
+
+-----
+
+### ブログサイトHTMLサンプルコード
+
+以下に、投稿一覧ページと記事詳細ページのHTMLコードを示します。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Awesome Blog</title>
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Posts Page Styles --- */
+        .page-title {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        [cite_start]/* Filter Section [cite: 9, 10] */
+        .filter-section {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+        }
+        .filter-section h3 {
+            margin-top: 0;
+            font-size: 1em;
+            color: #555;
+        }
+        .filter-tags {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .filter-tags li a {
+            display: block;
+            padding: 8px 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .filter-tags li a:hover {
+            background-color: #e0e0e0;
+        }
+
+        [cite_start]/* Posts Grid [cite: 4] */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .post-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+        .post-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .post-card-image img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover; [cite_start]/* [cite: 5] */
+        }
+        .post-card-content {
+            padding: 15px;
+        }
+        .category-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            color: #fff;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+        [cite_start]/* Category Colors [cite: 6] */
+        .category-fashion { background-color: #e91e63; }
+        .category-ramen { background-color: #f44336; }
+        .category-egg { background-color: #ffc107; }
+        .category-cafe { background-color: #8d6e63; }
+        .category-arcade { background-color: #2196f3; }
+        .category-locals { background-color: #ff9800; }
+
+        .post-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+        .post-card time {
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        /* --- Single Article Page Styles --- */
+        .single-post-header {
+            margin-bottom: 30px;
+        }
+        [cite_start].single-post-header .main-image { /* [cite: 14] */
+            width: 100%;
+            max-height: 450px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        [cite_start].single-post-header h1 { /* [cite: 14] */
+            font-size: 2em;
+            margin: 0 0 10px 0;
+        }
+        [cite_start].single-post-header .store-name { /* [cite: 15] */
+            font-size: 1.2em;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .single-post-content {
+            background-color: #fff;
+            padding: 20px;
+        }
+        [cite_start].single-post-content .store-concept { /* [cite: 22] */
+            color: #00695c;
+            font-size: 1.3em;
+            font-style: italic;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        [cite_start].content-section { /* [cite: 27, 30] */
+            margin-bottom: 30px;
+        }
+        .content-section h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        [cite_start].layout-block { /* [cite: 16] */
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        [cite_start].layout-block img { /* [cite: 17, 19] */
+            width: 40%;
+            object-fit: cover;
+        }
+        .layout-block .text-content {
+            width: 60%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="page-title">POSTS</h1>
+        <p>A collection of posts centered around amazing experiences.</p>
+
+        <section class="filter-section">
+            [cite_start]<h3>Filter by Category [cite: 10]</h3>
+            <ul class="filter-tags">
+                <li><a href="#">Fashion</a></li>
+                <li><a href="#">Ramen</a></li>
+                <li><a href="#">Egg Dishes</a></li>
+                <li><a href="#">Cafe</a></li>
+                <li><a href="#">Arcade</a></li>
+                <li><a href="#">Your Locals</a></li>
+            </ul>
+        </section>
+
+        <main class="posts-grid">
+            <article class="post-card">
+                <a href="#article-page-example"> <div class="post-card-image">
+                        <img src="https://i.imgur.com/GplnmUI.jpeg" alt="Omurice with fried shrimp"> </div>
+                    <div class="post-card-content">
+                        <span class="category-tag category-egg">Egg Dishes</span> <h3>The Original Omurice Born in Japan.</h3>
+                        <time datetime="2025-06-18">2025.06.18</time>
+                    </div>
+                </a>
+            </article>
+
+            <article class="post-card">
+                <a href="#">
+                    <div class="post-card-image">
+                        <img src="https://via.placeholder.com/300x180.png/a78263/ffffff?text=Cafe" alt="A cozy cafe"> </div>
+                    <div class="post-card-content">
+                        <span class="category-tag category-cafe">Cafe</span> <h3>A Quiet Cafe for a Relaxing Afternoon</h3>
+                        <time datetime="2025-05-20">2025.05.20</time>
+                    </div>
+                </a>
+            </article>
+
+            <article class="post-card">
+                <a href="#">
+                     <div class="post-card-image">
+                        <img src="https://via.placeholder.com/300x180.png/f34436/ffffff?text=Ramen+Shop" alt="A bowl of ramen"> </div>
+                    <div class="post-card-content">
+                        <span class="category-tag category-ramen">Ramen</span> <h3>The Richest Tonkotsu Ramen in Town</h3>
+                        <time datetime="2025-03-20">2025.03.20</time>
+                    </div>
+                </a>
+            </article>
+
+             <article class="post-card">
+                <a href="#">
+                     <div class="post-card-image">
+                        <img src="https://via.placeholder.com/300x180.png/ff9900/ffffff?text=Local+Person" alt="A local person smiling"> </div>
+                    <div class="post-card-content">
+                        <span class="category-tag category-locals">Your Locals</span> <h3>Meet the Local Craftsman</h3>
+                        <time datetime="2025-03-17">2025.03.17</time>
+                    </div>
+                </a>
+            </article>
+        </main>
+    </div>
+
+    <hr style="margin: 50px 0; border: 2px solid #4CAF50;">
+
+    <div class="container" id="article-page-example">
+
+        <article class="single-post">
+            <header class="single-post-header">
+                [cite_start]<img class="main-image" src="https://i.imgur.com/GplnmUI.jpeg" alt="Omurice with fried shrimp"> <h1>The Original Omurice Born in Japan. When it comes to omurice, this is the place! [cite: 14]</h1>
+                [cite_start]<p class="store-name">Hokkyokusei Shinsaibashi Main Store [cite: 15]</p>
+            </header>
+
+            <div class="single-post-content">
+                [cite_start]<span class="category-tag category-egg">Egg Dishes</span> <p class="store-concept">"A concept for the restaurant introduced this time is written here." [cite: 22]</p>
+
+                <section class="content-section">
+                    <h2>Introduction & Fun Facts</h2>
+                    [cite_start]<p>This is where the introduction and trivia section goes. [cite: 28, 31] [cite_start]We write something interesting here to grab the reader's attention and make the article itself more enjoyable. [cite: 28, 31] For example, we could discuss the history of Omurice or a fun fact about the restaurant.</p>
+                </section>
+
+                <section class="content-section">
+                    [cite_start]<h2>Store Appearance and Recommendations [cite: 26]</h2>
+                    <div class="layout-block"> <img src="https://via.placeholder.com/400x300.png/a78263/ffffff?text=Store+Exterior" alt="Exterior of the restaurant"> <div class="text-content">
+                            [cite_start]<h3>About the Restaurant [cite: 25]</h3>
+                            <p>Here we describe the exterior of the restaurant, the atmosphere, and our most recommended dish. [cite_start]This text would be placed next to a photo of the store's exterior or the signature dish. [cite: 18, 20]</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </div>
+
+</body>
+</html>
+```
