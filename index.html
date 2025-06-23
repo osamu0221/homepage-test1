@@ -1,261 +1,149 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Awesome Blog</title>
+    <title>ブログサイトサンプル</title>
     <style>
-        /* Basic Styles */
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            background-color: #f9f9f9;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1, h2, h3 {
-            color: #333;
-        }
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+        body { font-family: sans-serif; margin: 0; background-color: #f9f9f9; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        a { text-decoration: none; color: inherit; }
+        .page-title { color: #222; border-bottom: 2px solid #ddd; padding-bottom: 10px; font-weight: bold; }
 
-        /* --- Posts Page Styles --- */
-        .page-title {
-            color: #4CAF50;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 10px;
-        }
-
-        [cite_start]/* Filter Section [cite: 9, 10] */
-        .filter-section {
-            background-color: #fff;
-            padding: 15px;
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-        }
-        .filter-section h3 {
-            margin-top: 0;
-            font-size: 1em;
-            color: #555;
-        }
-        .filter-tags {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap;
+        /* Filter Section: 4x2 Grid */
+        .filter-section { background-color: #f7f7f7; padding: 20px; margin-bottom: 30px; border: 1px solid #ddd; }
+        .filter-section h3 { margin-top: 0; font-size: 1em; color: #555; text-align: center; margin-bottom: 15px; }
+        .filter-grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, auto);
             gap: 10px;
         }
-        .filter-tags li a {
+        .filter-button {
             display: block;
-            padding: 8px 15px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 0.9em;
-        }
-        .filter-tags li a:hover {
-            background-color: #e0e0e0;
-        }
-
-        [cite_start]/* Posts Grid [cite: 4] */
-        .posts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .post-card {
+            padding: 12px 5px;
             background-color: #fff;
-            border: 1px solid #ddd;
-            overflow: hidden;
-            transition: box-shadow 0.3s;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 0.9em;
+            transition: background-color 0.2s;
         }
-        .post-card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .post-card-image img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover; [cite_start]/* [cite: 5] */
-        }
-        .post-card-content {
-            padding: 15px;
-        }
-        .category-tag {
-            display: inline-block;
-            padding: 5px 10px;
-            color: #fff;
-            font-size: 0.8em;
-            margin-bottom: 10px;
-        }
-        [cite_start]/* Category Colors [cite: 6] */
-        .category-fashion { background-color: #e91e63; }
-        .category-ramen { background-color: #f44336; }
+        .filter-button:hover { background-color: #e9e9e9; }
+
+        /* Posts Grid */
+        .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .post-card { background-color: #fff; border: 1px solid #ddd; overflow: hidden; }
+        .post-card-image img { width: 100%; height: 180px; object-fit: cover; display: block; }
+        .post-card-content { padding: 15px; }
+        .category-tag { display: inline-block; padding: 5px 10px; color: #fff; font-size: 0.8em; margin-bottom: 10px; }
+        .category-interview { background-color: #2E8B57; }
         .category-egg { background-color: #ffc107; }
         .category-cafe { background-color: #8d6e63; }
-        .category-arcade { background-color: #2196f3; }
         .category-locals { background-color: #ff9800; }
+        .post-card h3 { margin: 0 0 10px 0; font-size: 1.2em; }
+        .post-card time { color: #777; font-size: 0.9em; }
 
-        .post-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.2em;
-        }
-        .post-card time {
-            color: #777;
-            font-size: 0.9em;
-        }
-
-        /* --- Single Article Page Styles --- */
-        .single-post-header {
-            margin-bottom: 30px;
-        }
-        [cite_start].single-post-header .main-image { /* [cite: 14] */
-            width: 100%;
-            max-height: 450px;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-        [cite_start].single-post-header h1 { /* [cite: 14] */
-            font-size: 2em;
-            margin: 0 0 10px 0;
-        }
-        [cite_start].single-post-header .store-name { /* [cite: 15] */
-            font-size: 1.2em;
-            color: #555;
-            font-weight: bold;
-        }
-
-        .single-post-content {
-            background-color: #fff;
-            padding: 20px;
-        }
-        [cite_start].single-post-content .store-concept { /* [cite: 22] */
-            color: #00695c;
-            font-size: 1.3em;
-            font-style: italic;
-            text-align: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-        }
-        [cite_start].content-section { /* [cite: 27, 30] */
-            margin-bottom: 30px;
-        }
-        .content-section h2 {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-        }
-        [cite_start].layout-block { /* [cite: 16] */
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        [cite_start].layout-block img { /* [cite: 17, 19] */
-            width: 40%;
-            object-fit: cover;
-        }
-        .layout-block .text-content {
-            width: 60%;
-        }
-
+        /* Article Page Styles */
+        .single-post-header .main-image { width: 100%; max-height: 450px; object-fit: cover; margin-bottom: 15px; }
+        .single-post-header h1 { font-size: 2em; margin: 0 0 10px 0; }
+        .single-post-header .store-name { font-size: 1.2em; color: #555; font-weight: bold; }
+        .single-post-content { background-color: #fff; padding: 30px; border: 1px solid #ddd; }
+        .single-post-content .store-concept { color: #00695c; font-size: 1.3em; font-style: italic; text-align: center; padding: 20px 0; margin-bottom: 20px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+        .content-section { margin-bottom: 30px; }
+        .content-section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 15px; }
+        .layout-block { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-bottom: 20px; }
+        .layout-block img { width: 100%; max-width: 350px; object-fit: cover; }
+        .layout-block .text-content { flex: 1; min-width: 250px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1 class="page-title">POSTS</h1>
-        <p>A collection of posts centered around amazing experiences.</p>
+        <h1 class="page-title">POSTS 記事一覧</h1>
 
         <section class="filter-section">
-            [cite_start]<h3>Filter by Category [cite: 10]</h3>
-            <ul class="filter-tags">
-                <li><a href="#">Fashion</a></li>
-                <li><a href="#">Ramen</a></li>
-                <li><a href="#">Egg Dishes</a></li>
-                <li><a href="#">Cafe</a></li>
-                <li><a href="#">Arcade</a></li>
-                <li><a href="#">Your Locals</a></li>
-            </ul>
+            <h3>カテゴリーから選ぶ</h3>
+            <div class="filter-grid-container">
+                <a href="#" class="filter-button">しまね留学インタビュー</a>
+                <a href="#" class="filter-button">事務局からのお知らせ</a>
+                <a href="#" class="filter-button">保護者の声</a>
+                <a href="#" class="filter-button">先生・CNインタビュー</a>
+                <a href="#" class="filter-button">卒業生の声</a>
+                <a href="#" class="filter-button">地元インタビュイー</a>
+                <a href="#" class="filter-button">地域の人々</a>
+                <a href="#" class="filter-button">高２留学生インタビュー</a>
+            </div>
         </section>
 
         <main class="posts-grid">
             <article class="post-card">
-                <a href="#article-page-example"> <div class="post-card-image">
-                        <img src="https://i.imgur.com/GplnmUI.jpeg" alt="Omurice with fried shrimp"> </div>
+                <a href="#article-page-example">
+                    <div class="post-card-image"><img src="https://i.imgur.com/8QWBHqf.png" alt="しまね留学インタビュー"></div>
                     <div class="post-card-content">
-                        <span class="category-tag category-egg">Egg Dishes</span> <h3>The Original Omurice Born in Japan.</h3>
+                        <span class="category-tag category-interview">しまね留学インタビュー</span>
+                        <h3>鉄道愛と地域への興味をいかし、島根県内の大学へ進学を決めた小西三太朗さん</h3>
                         <time datetime="2025-06-18">2025.06.18</time>
                     </div>
                 </a>
             </article>
-
             <article class="post-card">
-                <a href="#">
-                    <div class="post-card-image">
-                        <img src="https://via.placeholder.com/300x180.png/a78263/ffffff?text=Cafe" alt="A cozy cafe"> </div>
+                <a href="#article-page-example-2">
+                    <div class="post-card-image"><img src="https://i.imgur.com/GplnmUI.jpeg" alt="オムライス"></div>
                     <div class="post-card-content">
-                        <span class="category-tag category-cafe">Cafe</span> <h3>A Quiet Cafe for a Relaxing Afternoon</h3>
-                        <time datetime="2025-05-20">2025.05.20</time>
+                        <span class="category-tag category-egg">卵料理</span>
+                        <h3>日本発祥の昔ながらのオムライス。オムライスと言えばまずはここ！</h3>
+                        <time datetime="2025-06-15">2025.06.15</time>
                     </div>
                 </a>
             </article>
-
             <article class="post-card">
                 <a href="#">
-                     <div class="post-card-image">
-                        <img src="https://via.placeholder.com/300x180.png/f34436/ffffff?text=Ramen+Shop" alt="A bowl of ramen"> </div>
+                    <div class="post-card-image"><img src="https://i.imgur.com/V98wG3J.png" alt="地域の人々"></div>
                     <div class="post-card-content">
-                        <span class="category-tag category-ramen">Ramen</span> <h3>The Richest Tonkotsu Ramen in Town</h3>
-                        <time datetime="2025-03-20">2025.03.20</time>
+                        <span class="category-tag category-locals">地域の人々</span>
+                        <h3>農業、祭、イベント。この町でしかできない、めいっぱいの経験を。</h3>
+                        <time datetime="2025-03-17">2025.03.17</time>
                     </div>
                 </a>
             </article>
-
              <article class="post-card">
                 <a href="#">
-                     <div class="post-card-image">
-                        <img src="https://via.placeholder.com/300x180.png/ff9900/ffffff?text=Local+Person" alt="A local person smiling"> </div>
+                    <div class="post-card-image"><img src="https://i.imgur.com/bK16H8S.png" alt="カフェ"></div>
                     <div class="post-card-content">
-                        <span class="category-tag category-locals">Your Locals</span> <h3>Meet the Local Craftsman</h3>
-                        <time datetime="2025-03-17">2025.03.17</time>
+                        <span class="category-tag category-cafe">喫茶店</span>
+                        <h3>静かな午後を過ごすための隠れ家カフェ</h3>
+                        <time datetime="2025-02-28">2025.02.28</time>
                     </div>
                 </a>
             </article>
         </main>
     </div>
 
-    <hr style="margin: 50px 0; border: 2px solid #4CAF50;">
+    <hr style="margin: 50px 0; border: 2px solid #ccc;">
 
-    <div class="container" id="article-page-example">
+    ### 例２：記事詳細ページHTML
 
+    <div class="container" id="article-page-example-2">
         <article class="single-post">
             <header class="single-post-header">
-                [cite_start]<img class="main-image" src="https://i.imgur.com/GplnmUI.jpeg" alt="Omurice with fried shrimp"> <h1>The Original Omurice Born in Japan. When it comes to omurice, this is the place! [cite: 14]</h1>
-                [cite_start]<p class="store-name">Hokkyokusei Shinsaibashi Main Store [cite: 15]</p>
+                <img class="main-image" src="https://i.imgur.com/GplnmUI.jpeg" alt="オムライス">
+                <h1>日本発祥の昔ながらのオムライス。オムライスと言えばまずはここ！</h1>
+                <p class="store-name">北極星 心斎橋本店</p>
             </header>
-
             <div class="single-post-content">
-                [cite_start]<span class="category-tag category-egg">Egg Dishes</span> <p class="store-concept">"A concept for the restaurant introduced this time is written here." [cite: 22]</p>
-
+                <span class="category-tag category-egg">卵料理</span>
+                <p class="store-concept">今回紹介する店のコンセプトを考えて、書く</p>
                 <section class="content-section">
-                    <h2>Introduction & Fun Facts</h2>
-                    [cite_start]<p>This is where the introduction and trivia section goes. [cite: 28, 31] [cite_start]We write something interesting here to grab the reader's attention and make the article itself more enjoyable. [cite: 28, 31] For example, we could discuss the history of Omurice or a fun fact about the restaurant.</p>
+                    <h2>導入と雑学コーナー</h2>
+                    <p>序盤は導入と雑学コーナーを書いて、記事自体の面白さをアピールしていく</p>
                 </section>
-
                 <section class="content-section">
-                    [cite_start]<h2>Store Appearance and Recommendations [cite: 26]</h2>
-                    <div class="layout-block"> <img src="https://via.placeholder.com/400x300.png/a78263/ffffff?text=Store+Exterior" alt="Exterior of the restaurant"> <div class="text-content">
-                            [cite_start]<h3>About the Restaurant [cite: 25]</h3>
-                            <p>Here we describe the exterior of the restaurant, the atmosphere, and our most recommended dish. [cite_start]This text would be placed next to a photo of the store's exterior or the signature dish. [cite: 18, 20]</p>
+                    <h2>店の紹介</h2>
+                    <div class="layout-block">
+                        <img src="https://via.placeholder.com/400x300.png/a78263/ffffff?text=店の外観" alt="店の外観">
+                        <div class="text-content">
+                            <h3>外観とおすすめ紹介</h3>
+                            <p>店の外観や一番紹介したいものの写真を載せる。ここには店の説明文が入ります。</p>
                         </div>
                     </div>
                 </section>
@@ -265,4 +153,3 @@
 
 </body>
 </html>
-```
